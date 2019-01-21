@@ -29,12 +29,9 @@ document.addEventListener('click', function(e) {
 			// determine the best selector based on selector rankings
 			determineBestSelector(selectors);
 			// copy find by tag to clipboard
-			copyToClipboard(
-				selectors.recommendedSelector,
-				CreateName(e.target, selectors.recommendedSelector),
-			);
+			copyToClipboard(CreateName(e.target, selectors.recommendedSelector));
 
-			console.log(selectors);
+			// console.log(selectors);
 		}
 	});
 });
@@ -49,7 +46,10 @@ var CreateName = function(element, selector) {
 			element.innerText
 		).replace(/[^a-z]/gi, '') +
 		' = @"' +
-		element.id +
+		selector
+			.replace('@FindBy(', '')
+			.replace('")', '')
+			.replace('"', '') +
 		'";'
 	);
 };
@@ -178,7 +178,7 @@ var determineBestSelector = function(collector) {
 		collector.recommendedSelector = collector.xpath.tag;
 	}
 };
-var copyToClipboard = function(text, name) {
+var copyToClipboard = function(text) {
 	var copyDiv = document.createElement('div');
 	copyDiv.contentEditable = true;
 	document.body.appendChild(copyDiv);
@@ -188,5 +188,5 @@ var copyToClipboard = function(text, name) {
 	document.execCommand('SelectAll');
 	document.execCommand('Copy', false, null);
 	document.body.removeChild(copyDiv);
-	console.log(name);
+	console.log(text);
 };
