@@ -1,6 +1,5 @@
 document.addEventListener('click', function(e) {
 	chrome.storage.sync.get('enabled', function(value) {
-		var name = CreateName(e);
 		if (value.enabled) {
 			var selectors = {};
 			e.preventDefault();
@@ -32,7 +31,7 @@ document.addEventListener('click', function(e) {
 			// copy find by tag to clipboard
 			copyToClipboard(
 				selectors.recommendedSelector,
-				CreateName(sourceElement, selectors.recommendedSelector),
+				CreateName(e.target, selectors.recommendedSelector),
 			);
 
 			console.log(selectors);
@@ -50,7 +49,7 @@ var CreateName = function(element, selector) {
 			element.innerText
 		).replace(/[^a-z]/gi, '') +
 		' = @"' +
-		selector.replace('"', "'") +
+		element.id +
 		'";'
 	);
 };
